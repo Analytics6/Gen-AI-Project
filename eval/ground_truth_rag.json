@@ -1,0 +1,62 @@
+[
+  {
+    "id": "gt_001",
+    "question": "Give a short summary of candidate Rhonda Mathews from her resume.",
+    "expected_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+    "expected_answer_keywords": ["Rhonda", "Mathews", "experience"]
+  },
+  {
+    "id": "gt_002",
+    "question": "What does Taylor Clark's resume highlight about background and strengths?",
+    "expected_source": "data/Resume_035002_Taylor_Clark.pdf",
+    "expected_answer_keywords": ["Taylor", "Clark", "skills"]
+  },
+  {
+    "id": "gt_003",
+    "question": "Summarize Alan Estes' professional profile from the provided document.",
+    "expected_source": "data/Resume_035003_Alan_Estes.pdf",
+    "expected_answer_keywords": ["Alan", "Estes", "profile"]
+  },
+  {
+    "id": "gt_004",
+    "question": "Provide key points from Mercedes Lester's resume.",
+    "expected_source": "data/Resume_035004_Mercedes_Lester.pdf",
+    "expected_answer_keywords": ["Mercedes", "Lester", "resume"]
+  },
+  {
+    "id": "gt_005",
+    "question": "What information is available for Jessica Boyer in the resume?",
+    "expected_source": "data/Resume_035005_Jessica_Boyer.pdf",
+    "expected_answer_keywords": ["Jessica", "Boyer", "information"]
+  },
+  {
+    "id": "gt_006",
+    "question": "Summarize Linda Moore's relevant qualifications from the PDF.",
+    "expected_source": "data/Resume_035006_Linda_Moore.pdf",
+    "expected_answer_keywords": ["Linda", "Moore", "qualifications"]
+  },
+  {
+    "id": "gt_007",
+    "question": "List highlights from Matthew Fleming's resume.",
+    "expected_source": "data/Resume_035007_Matthew_Fleming.pdf",
+    "expected_answer_keywords": ["Matthew", "Fleming", "highlights"]
+  },
+  {
+    "id": "gt_008",
+    "question": "Which PDF contains candidate Rhonda Mathews and what does it mention?",
+    "expected_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+    "expected_answer_keywords": ["Rhonda", "Mathews"]
+  },
+  {
+    "id": "gt_009",
+    "question": "Find the resume for Taylor Clark and summarize the core details.",
+    "expected_source": "data/Resume_035002_Taylor_Clark.pdf",
+    "expected_answer_keywords": ["Taylor", "Clark"]
+  },
+  {
+    "id": "gt_010",
+    "question": "From the Alan Estes PDF, provide a concise profile overview.",
+    "expected_source": "data/Resume_035003_Alan_Estes.pdf",
+    "expected_answer_keywords": ["Alan", "Estes"]
+  }
+]

@@ -1,12 +1,7 @@
-import json
-from typing import Sequence
-
-import numpy as np
 from openai import OpenAI
-from sqlalchemy.orm import Session
 
+from app.chroma_store import store
 from app.config import settings
-from app.models import DocumentChunk
 
 
 class RAGService:
@@ -22,29 +17,27 @@ class RAGService:
         )
         return response.data[0].embedding
 
-    def find_relevant_chunks(self, db: Session, query_embedding: Sequence[float]) -> list[DocumentChunk]:
-        chunks = db.query(DocumentChunk).all()
-        if not chunks:
-            return []
+    def find_relevant_chunks(self, query_embedding: list[float]) -> list[dict]:
+        return store.query_document_chunks(query_embedding=query_embedding, top_k=settings.rag_top_k)
 
-        query_vec = np.array(query_embedding, dtype=np.float32)
-        scored: list[tuple[float, DocumentChunk]] = []
-
-        for chunk in chunks:
-            chunk_vec = np.array(json.loads(chunk.embedding_json), dtype=np.float32)
-            denom = np.linalg.norm(query_vec) * np.linalg.norm(chunk_vec)
-            score = float(np.dot(query_vec, chunk_vec) / denom) if denom else 0.0
-            scored.append((score, chunk))
-
-        scored.sort(key=lambda value: value[0], reverse=True)
-        return [chunk for _, chunk in scored[: settings.rag_top_k]]
-
-    def generate_answer(self, user_message: str, context_chunks: list[DocumentChunk], history: list[dict]) -> str:
-        context = "\n\n".join([f"Source: {c.source}\n{c.chunk_text}" for c in context_chunks])
-        system_prompt = (
-            "You are a helpful enterprise assistant. Use provided context when relevant. "
-            "If the answer is not in context, say so clearly and provide best-effort guidance."
+    def generate_answer(
+        self,
+        user_message: str,
+        context_chunks: list[dict],
+        history: list[dict],
+        prompt_template: str | None = None,
+    ) -> str:
+        context = "\n\n".join(
+            [f"Source: {chunk['source']}\n{chunk['chunk_text']}" for chunk in context_chunks]
         )
+        system_prompt = (
+            "You are a professional call-center support chatbot. "
+            "You must answer strictly and only from the provided PDF context snippets. "
+            "If the answer is missing in context, reply exactly: "
+            "'I can only answer from the provided PDF documents.'"
+        )
+        if prompt_template:
+            system_prompt = f"{system_prompt}\n\nPrompt template:\n{prompt_template}"
 
         messages = [{"role": "system", "content": system_prompt}]
         for msg in history:
@@ -56,7 +49,8 @@ class RAGService:
                 "content": (
                     "Context:\n"
                     f"{context if context else 'No relevant context found.'}\n\n"
-                    "Question:\n"
+                    "Important: answer only from context sourced from PDF documents.\n\n"
+                    "Customer question:\n"
                     f"{user_message}"
                 ),
             }

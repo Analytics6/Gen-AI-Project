@@ -1,0 +1,415 @@
+{
+  "generated_at": "2026-02-17T05:22:49.134046+00:00",
+  "ground_truth_path": "eval/ground_truth_rag.json",
+  "prompt_template_id": "persona_professional",
+  "top_k": 4,
+  "total_metrics": 20,
+  "metrics": [
+    {
+      "metric_key": "eval_total_questions",
+      "metric_label": "Total Questions",
+      "metric_value": 10.0,
+      "unit": "count",
+      "category": "overview"
+    },
+    {
+      "metric_key": "eval_hit_rate_at_1",
+      "metric_label": "Hit Rate @1",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_hit_rate_at_3",
+      "metric_label": "Hit Rate @3",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_hit_rate_at_4",
+      "metric_label": "Hit Rate @4",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_mrr_at_4",
+      "metric_label": "MRR @4",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_exact_source_match_rate",
+      "metric_label": "Exact Source Match",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_source_precision_at_4",
+      "metric_label": "Source Precision @4",
+      "metric_value": 0.3,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_source_recall_at_4",
+      "metric_label": "Source Recall @4",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "retrieval"
+    },
+    {
+      "metric_key": "eval_avg_retrieval_latency_ms",
+      "metric_label": "Avg Retrieval Latency",
+      "metric_value": 261.61465219984166,
+      "unit": "ms",
+      "category": "latency"
+    },
+    {
+      "metric_key": "eval_p95_retrieval_latency_ms",
+      "metric_label": "P95 Retrieval Latency",
+      "metric_value": 540.3062829991541,
+      "unit": "ms",
+      "category": "latency"
+    },
+    {
+      "metric_key": "eval_avg_generation_latency_ms",
+      "metric_label": "Avg Generation Latency",
+      "metric_value": 2913.600982200205,
+      "unit": "ms",
+      "category": "latency"
+    },
+    {
+      "metric_key": "eval_p95_generation_latency_ms",
+      "metric_label": "P95 Generation Latency",
+      "metric_value": 4768.194164999841,
+      "unit": "ms",
+      "category": "latency"
+    },
+    {
+      "metric_key": "eval_avg_total_latency_ms",
+      "metric_label": "Avg Total Latency",
+      "metric_value": 3175.2299364000464,
+      "unit": "ms",
+      "category": "latency"
+    },
+    {
+      "metric_key": "eval_answer_non_empty_rate",
+      "metric_label": "Answer Non-empty Rate",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "generation"
+    },
+    {
+      "metric_key": "eval_refusal_rate",
+      "metric_label": "Refusal Rate",
+      "metric_value": 0.0,
+      "unit": "ratio",
+      "category": "generation"
+    },
+    {
+      "metric_key": "eval_grounded_answer_rate",
+      "metric_label": "Grounded Answer Rate",
+      "metric_value": 1.0,
+      "unit": "ratio",
+      "category": "generation"
+    },
+    {
+      "metric_key": "eval_avg_answer_context_overlap",
+      "metric_label": "Avg Answer-Context Overlap",
+      "metric_value": 0.8010690833608314,
+      "unit": "ratio",
+      "category": "generation"
+    },
+    {
+      "metric_key": "eval_avg_expected_keyword_coverage",
+      "metric_label": "Avg Expected Keyword Coverage",
+      "metric_value": 0.8666666666666667,
+      "unit": "ratio",
+      "category": "generation"
+    },
+    {
+      "metric_key": "eval_avg_context_chars",
+      "metric_label": "Avg Context Chars",
+      "metric_value": 4006.0,
+      "unit": "count",
+      "category": "context"
+    },
+    {
+      "metric_key": "eval_avg_answer_chars",
+      "metric_label": "Avg Answer Chars",
+      "metric_value": 664.2,
+      "unit": "count",
+      "category": "context"
+    }
+  ],
+  "per_question": [
+    {
+      "id": "gt_001",
+      "question": "Give a short summary of candidate Rhonda Mathews from her resume.",
+      "expected_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+      "retrieved_sources": [
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035002_Taylor_Clark.pdf",
+        "data/Resume_035005_Jessica_Boyer.pdf",
+        "data/Resume_035006_Linda_Moore.pdf"
+      ],
+      "top_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Rhonda Mathews is an experienced professional with a strong background in Psychology and expertise in Docker, CI/CD, and C++. She has a proven track record of delivering high-quality results in fast-paced environments and demonstrates excellent adaptability and teamwork skills. Rhonda is passionate about continuous learning and professional development. Her recent role was as a Quality Assurance Engineer at Gonzales and Sons from 2023 to 2024.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.7455,
+      "expected_keyword_coverage": 0.6667,
+      "retrieval_latency_ms": 353.7,
+      "generation_latency_ms": 2416.96,
+      "total_latency_ms": 2770.68,
+      "context_chars": 4006,
+      "answer_chars": 447
+    },
+    {
+      "id": "gt_002",
+      "question": "What does Taylor Clark's resume highlight about background and strengths?",
+      "expected_source": "data/Resume_035002_Taylor_Clark.pdf",
+      "retrieved_sources": [
+        "data/Resume_035002_Taylor_Clark.pdf",
+        "data/Resume_035005_Jessica_Boyer.pdf",
+        "data/Resume_035003_Alan_Estes.pdf",
+        "data/Resume_035007_Matthew_Fleming.pdf"
+      ],
+      "top_source": "data/Resume_035002_Taylor_Clark.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Taylor Clark's resume highlights a strong background in Psychology along with expertise in Data Analysis, Azure, and Docker. The resume emphasizes a proven track record of delivering high-quality results in fast-paced environments. Additionally, Taylor Clark demonstrates excellent attention to detail and problem-solving skills, coupled with a passion for continuous learning and professional development.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8298,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 235.51,
+      "generation_latency_ms": 1840.65,
+      "total_latency_ms": 2076.18,
+      "context_chars": 4006,
+      "answer_chars": 406
+    },
+    {
+      "id": "gt_003",
+      "question": "Summarize Alan Estes' professional profile from the provided document.",
+      "expected_source": "data/Resume_035003_Alan_Estes.pdf",
+      "retrieved_sources": [
+        "data/Resume_035003_Alan_Estes.pdf",
+        "data/Resume_035007_Matthew_Fleming.pdf",
+        "data/Resume_035004_Mercedes_Lester.pdf"
+      ],
+      "top_source": "data/Resume_035003_Alan_Estes.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Alan Estes is an experienced professional with a strong background in Psychology and expertise in Java, CI/CD, and Data Analysis. He has a proven track record of delivering high-quality results in fast-paced environments and possesses excellent critical thinking and leadership skills. Alan has held roles including Business Analyst at Valentine LLC (2021-2024), DevOps Engineer at Phelps-Larsen (2016-2019), and Full Stack Developer at Ellis-Morales (2008-Present). His technical skills include Java, CI/CD, Data Analysis, Git, Azure, C++, React, and Node.js. He holds a Bachelor's degree in Engineering from Williams, Osborne and Booth University with a GPA of 3.4 (2020). Alan is also noted for his problem solving, communication, and time management abilities.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8495,
+      "expected_keyword_coverage": 0.6667,
+      "retrieval_latency_ms": 540.31,
+      "generation_latency_ms": 3389.62,
+      "total_latency_ms": 3929.94,
+      "context_chars": 4006,
+      "answer_chars": 764
+    },
+    {
+      "id": "gt_004",
+      "question": "Provide key points from Mercedes Lester's resume.",
+      "expected_source": "data/Resume_035004_Mercedes_Lester.pdf",
+      "retrieved_sources": [
+        "data/Resume_035004_Mercedes_Lester.pdf",
+        "data/Resume_035007_Matthew_Fleming.pdf",
+        "data/Resume_035001_Rhonda_Mathews.pdf"
+      ],
+      "top_source": "data/Resume_035004_Mercedes_Lester.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Certainly. Key points from Mercedes Lester's resume are as follows:\n\n- Professional Summary: Experienced professional with a strong background in Psychology and expertise in Git, Java, and CI/CD. Demonstrates excellent creativity and time management skills, with a passion for continuous learning and professional development.\n\n- Professional Experience:\n  - Data Scientist at Miller LLC from 2021 to 2024.\n  - Systems Administrator at Phillips-Robbins from 2016 to Present.\n\n- Contact Information: Email - mercedes.lester35004@gutierrez.com; Phone - 844.485.5450x011; LinkedIn - linkedin.com/in/mercedes-lester-35004.\n\nPlease let me know if you need further details.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.726,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 235.35,
+      "generation_latency_ms": 2821.7,
+      "total_latency_ms": 3057.06,
+      "context_chars": 4006,
+      "answer_chars": 667
+    },
+    {
+      "id": "gt_005",
+      "question": "What information is available for Jessica Boyer in the resume?",
+      "expected_source": "data/Resume_035005_Jessica_Boyer.pdf",
+      "retrieved_sources": [
+        "data/Resume_035005_Jessica_Boyer.pdf",
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035002_Taylor_Clark.pdf",
+        "data/Resume_035004_Mercedes_Lester.pdf"
+      ],
+      "top_source": "data/Resume_035005_Jessica_Boyer.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Jessica Boyer can be reached at jessica.boyer35005@leach.org or 687.908.6429x411. Her address is 3489 Best Springs, Harrisfurt, UT 24057. She has a LinkedIn profile at linkedin.com/in/jessica-boyer-35005.\n\nHer professional summary highlights her as an experienced professional with a strong background in Psychology and expertise in MongoDB, Agile, and Machine Learning. She has a proven track record of delivering high-quality results in fast-paced environments and possesses excellent Time Management and Creativity skills, along with a passion for continuous learning and professional development.\n\nHer professional experience includes:\n- Project Manager at Cisneros Ltd from 2021 to 2024, with responsibilities described as \"Money trade city administration college idea toward,\" \"Economic third visit season anything,\" \"Push fly could south,\" and \"Cell back whatever growth how three.\"\n- Data Analyst at Baldwin PLC from 2016 to 2019, with duties including \"Arrive rich star section within up possible with fast,\" \"Fast job plant own avoid various side economic,\" \"American painting son whether him among,\" \"More pay beat view participant style interesting daughter discussion,\" and \"Research leave water sign least k.\"",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8611,
+      "expected_keyword_coverage": 0.6667,
+      "retrieval_latency_ms": 199.18,
+      "generation_latency_ms": 4768.19,
+      "total_latency_ms": 4967.39,
+      "context_chars": 4006,
+      "answer_chars": 1223
+    },
+    {
+      "id": "gt_006",
+      "question": "Summarize Linda Moore's relevant qualifications from the PDF.",
+      "expected_source": "data/Resume_035006_Linda_Moore.pdf",
+      "retrieved_sources": [
+        "data/Resume_035006_Linda_Moore.pdf",
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035004_Mercedes_Lester.pdf"
+      ],
+      "top_source": "data/Resume_035006_Linda_Moore.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Linda Moore is an experienced professional with a strong background in Psychology and expertise in Java, Project Management, and C++. She has a proven track record of delivering high-quality results in fast-paced environments. Her key skills include excellent leadership and critical thinking, along with a passion for continuous learning and professional development. Professionally, she has worked as a Data Analyst at Stewart PLC from 2020 to 2024 and at Martinez-Martin from 2017 to 2018.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8033,
+      "expected_keyword_coverage": 0.6667,
+      "retrieval_latency_ms": 265.98,
+      "generation_latency_ms": 3003.68,
+      "total_latency_ms": 3269.67,
+      "context_chars": 4006,
+      "answer_chars": 492
+    },
+    {
+      "id": "gt_007",
+      "question": "List highlights from Matthew Fleming's resume.",
+      "expected_source": "data/Resume_035007_Matthew_Fleming.pdf",
+      "retrieved_sources": [
+        "data/Resume_035007_Matthew_Fleming.pdf",
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035003_Alan_Estes.pdf"
+      ],
+      "top_source": "data/Resume_035007_Matthew_Fleming.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Certainly. Highlights from Matthew Fleming's resume include:\n\n- Professional Summary: Experienced professional with a strong background in Psychology and expertise in JavaScript, Data Analysis, and CI/CD. Demonstrates excellent work ethic, creativity, and a passion for continuous learning and professional development.\n\n- Professional Experience:\n  \u2022 DevOps Engineer at Banks-Rodriguez (2020 - 2024)\n  \u2022 Data Scientist at Collier, Burnett and Lee (2016 - 2018)\n  \u2022 Business Analyst at Myers LLC (2008 - Present)\n\n- Education:\n  \u2022 Bachelor's in Information Technology from Hess Group University, GPA 3.62, 2018\n  \u2022 Master's in Mathematics from Mejia-Owen University, GPA 3.49, 2018\n\n- Technical Skills: JavaScript, Data Analysis, CI/CD, Kubernetes, C++, MongoDB, Node.js\n\n- Soft Skills: Work Ethic, Creativity\n\nPlease let me know if you need further details.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8256,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 203.1,
+      "generation_latency_ms": 4420.68,
+      "total_latency_ms": 4623.8,
+      "context_chars": 4006,
+      "answer_chars": 858
+    },
+    {
+      "id": "gt_008",
+      "question": "Which PDF contains candidate Rhonda Mathews and what does it mention?",
+      "expected_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+      "retrieved_sources": [
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035002_Taylor_Clark.pdf",
+        "data/Resume_035006_Linda_Moore.pdf"
+      ],
+      "top_source": "data/Resume_035001_Rhonda_Mathews.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "The PDF containing candidate Rhonda Mathews is titled \"Resume_035001_Rhonda_Mathews.pdf.\" It mentions that Rhonda Mathews is an experienced professional with a strong background in Psychology and expertise in Docker, CI/CD, and C++. She has a proven track record of delivering high-quality results in fast-paced environments and possesses excellent adaptability and teamwork skills, along with a passion for continuous learning and professional development. Her professional experience includes working as a Quality Assurance Engineer at Gonzales and Sons from 2023 to 2024 and as a Business Analyst at Fuentes, Jordan and Garcia in 2018.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.7222,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 196.78,
+      "generation_latency_ms": 2291.13,
+      "total_latency_ms": 2487.92,
+      "context_chars": 4006,
+      "answer_chars": 638
+    },
+    {
+      "id": "gt_009",
+      "question": "Find the resume for Taylor Clark and summarize the core details.",
+      "expected_source": "data/Resume_035002_Taylor_Clark.pdf",
+      "retrieved_sources": [
+        "data/Resume_035002_Taylor_Clark.pdf",
+        "data/Resume_035005_Jessica_Boyer.pdf",
+        "data/Resume_035007_Matthew_Fleming.pdf"
+      ],
+      "top_source": "data/Resume_035002_Taylor_Clark.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Certainly. Taylor Clark's resume highlights the following core details:\n\n- Contact: taylor.clark35002@sandoval.com, (661)397-6888x7070, located at 6045 Spencer Manors Suite 931, Lake Joseph, GA 69405.\n- Professional Summary: Experienced professional with a strong background in Psychology and expertise in Data Analysis, Azure, and Docker. Demonstrates excellent attention to detail and problem-solving skills, with a passion for continuous learning and professional development.\n- Professional Experience:\n  \u2022 Full Stack Developer at Maldonado PLC from 2020 to 2024.\n  \u2022 Data Scientist at Jackson LLC from 2017 to 2018.\n- Skills and accomplishments include delivering high-quality results in fast-paced environments.\n\nIf you need more specific information from the resume, please let me know.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.764,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 194.56,
+      "generation_latency_ms": 2891.74,
+      "total_latency_ms": 3086.32,
+      "context_chars": 4006,
+      "answer_chars": 793
+    },
+    {
+      "id": "gt_010",
+      "question": "From the Alan Estes PDF, provide a concise profile overview.",
+      "expected_source": "data/Resume_035003_Alan_Estes.pdf",
+      "retrieved_sources": [
+        "data/Resume_035003_Alan_Estes.pdf",
+        "data/Resume_035001_Rhonda_Mathews.pdf",
+        "data/Resume_035005_Jessica_Boyer.pdf",
+        "data/Resume_035007_Matthew_Fleming.pdf"
+      ],
+      "top_source": "data/Resume_035003_Alan_Estes.pdf",
+      "source_rank": 1,
+      "hit_at_1": 1,
+      "hit_at_3": 1,
+      "hit_at_4": 1,
+      "answer": "Alan Estes is an experienced professional with a strong background in Psychology and expertise in Java, CI/CD, and Data Analysis. He has a proven track record of delivering high-quality results in fast-paced environments and possesses excellent critical thinking and leadership skills, with a passion for continuous learning and professional development.",
+      "answer_non_empty": 1,
+      "is_refusal": 0,
+      "is_grounded": 1,
+      "answer_context_overlap": 0.8837,
+      "expected_keyword_coverage": 1.0,
+      "retrieval_latency_ms": 191.68,
+      "generation_latency_ms": 1291.66,
+      "total_latency_ms": 1483.35,
+      "context_chars": 4006,
+      "answer_chars": 354
+    }
+  ]
+}

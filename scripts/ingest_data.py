@@ -1,8 +1,8 @@
-import json
 from pathlib import Path
 
-from app.db import Base, SessionLocal, engine
-from app.models import DocumentChunk
+from pypdf import PdfReader
+
+from app.chroma_store import store
 from app.rag import RAGService
 
 
@@ -20,41 +20,35 @@ def split_text(text: str, chunk_size: int = 1000, overlap: int = 150) -> list[st
 
 
 def ingest_directory(data_dir: Path):
-    Base.metadata.create_all(bind=engine)
     rag = RAGService()
-    db = SessionLocal()
+    store.clear_documents()
 
-    try:
-        db.query(DocumentChunk).delete()
-        db.commit()
+    files = [p for p in data_dir.rglob("*") if p.is_file() and p.suffix.lower() == ".pdf"]
+    total_chunks = 0
 
-        files = [
-            p
-            for p in data_dir.rglob("*")
-            if p.is_file() and p.suffix.lower() in {".txt", ".md", ".csv", ".json"}
-        ]
+    for file_path in files:
+        reader = PdfReader(str(file_path))
+        pages = [page.extract_text() or "" for page in reader.pages]
+        text = "\n".join([page.strip() for page in pages if page.strip()])
+        if not text.strip():
+            continue
 
-        for file_path in files:
-            text = file_path.read_text(encoding="utf-8", errors="ignore")
-            for chunk in split_text(text):
-                emb = rag.embed_text(chunk)
-                row = DocumentChunk(
-                    source=str(file_path.relative_to(data_dir.parent)),
-                    chunk_text=chunk,
-                    embedding_json=json.dumps(emb),
-                )
-                db.add(row)
+        for chunk in split_text(text):
+            emb = rag.embed_text(chunk)
+            store.add_document_chunk(
+                source=str(file_path.relative_to(data_dir.parent)),
+                chunk_text=chunk,
+                embedding=emb,
+            )
+            total_chunks += 1
 
-        db.commit()
-        print(f"Ingestion complete. Indexed {len(files)} files.")
-    finally:
-        db.close()
+    print(f"Ingestion complete. Indexed {len(files)} PDF files and {total_chunks} chunks.")
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Ingest files from data directory into embeddings table.")
+    parser = argparse.ArgumentParser(description="Ingest PDF files from data directory into ChromaDB.")
     parser.add_argument("--data-dir", default="data")
     args = parser.parse_args()
 

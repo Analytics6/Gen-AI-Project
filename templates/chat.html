@@ -3,27 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAG Chatbot</title>
+  <title>Call Center Agent Chatbot</title>
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body class="chat-body">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>Chats</h2>
-      <button id="new-chat-btn">New</button>
-    </div>
-    <div id="chat-list" class="chat-list"></div>
-    <button id="logout-btn" class="logout-btn">Logout</button>
-  </aside>
-
-  <main class="chat-main">
-    <div id="messages" class="messages"></div>
-    <form id="message-form" class="message-form">
-      <input id="message-input" type="text" placeholder="Ask a question about your data..." required />
-      <button type="submit">Send</button>
-    </form>
-  </main>
-
-  <script src="/static/chat.js"></script>
+  <div id="chat-app"></div>
+  <script type="module" src="/static/chat-react.js"></script>
 </body>
 </html>

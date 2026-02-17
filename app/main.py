@@ -1,15 +1,13 @@
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, Form, HTTPException, Request
+from fastapi import FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
+from app.chroma_store import store
 from app.config import settings
-from app.db import Base, engine, get_db
-from app.models import Chat, Message, User
 from app.rag import RAGService
 from app.security import verify_password
 
@@ -29,15 +27,15 @@ except Exception:
 
 @app.on_event("startup")
 def startup_event():
-    Base.metadata.create_all(bind=engine)
+    store.seed_prompt_templates()
 
 
-def get_current_user(request: Request, db: Session) -> User:
+def get_current_user(request: Request) -> dict:
     user_id = request.session.get("user_id")
     if not user_id:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
-    user = db.query(User).filter(User.id == user_id).first()
+    user = store.get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid session")
     return user
@@ -67,14 +65,13 @@ def login(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
-    db: Session = Depends(get_db),
 ):
-    user = db.query(User).filter(User.username == username).first()
-    if not user or not verify_password(password, user.password_hash):
+    user = store.get_user_by_username(username)
+    if not user or not verify_password(password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
-    request.session["user_id"] = user.id
-    return {"ok": True, "username": user.username}
+    request.session["user_id"] = user["id"]
+    return {"ok": True, "username": user["username"]}
 
 
 @app.post("/api/logout")
@@ -84,64 +81,53 @@ def logout(request: Request):
 
 
 @app.get("/api/chats")
-def list_chats(request: Request, db: Session = Depends(get_db)):
-    user = get_current_user(request, db)
-    chats = (
-        db.query(Chat)
-        .filter(Chat.user_id == user.id)
-        .order_by(Chat.updated_at.desc(), Chat.id.desc())
-        .all()
-    )
+def list_chats(request: Request):
+    user = get_current_user(request)
+    chats = store.list_chats(user_id=user["id"])
     return [
         {
-            "id": c.id,
-            "title": c.title,
-            "created_at": c.created_at.isoformat() if c.created_at else None,
-            "updated_at": c.updated_at.isoformat() if c.updated_at else None,
+            "id": c["id"],
+            "title": c["title"],
+            "created_at": c.get("created_at"),
+            "updated_at": c.get("updated_at"),
         }
         for c in chats
     ]
 
 
 @app.post("/api/chats")
-def create_chat(request: Request, db: Session = Depends(get_db)):
-    user = get_current_user(request, db)
-    chat = Chat(user_id=user.id, title="New Chat")
-    db.add(chat)
-    db.commit()
-    db.refresh(chat)
-    return {"id": chat.id, "title": chat.title}
+def create_chat(request: Request):
+    user = get_current_user(request)
+    chat = store.create_chat(user_id=user["id"], title="New Chat")
+    return {"id": chat["id"], "title": chat["title"]}
 
 
 @app.get("/api/chats/{chat_id}/messages")
-def get_messages(chat_id: int, request: Request, db: Session = Depends(get_db)):
-    user = get_current_user(request, db)
-    chat = db.query(Chat).filter(Chat.id == chat_id, Chat.user_id == user.id).first()
-    if not chat:
+def get_messages(chat_id: str, request: Request):
+    user = get_current_user(request)
+    chat = store.get_chat(chat_id)
+    if not chat or chat.get("user_id") != user["id"]:
         raise HTTPException(status_code=404, detail="Chat not found")
 
-    messages = (
-        db.query(Message)
-        .filter(Message.chat_id == chat_id)
-        .order_by(Message.created_at.asc(), Message.id.asc())
-        .all()
-    )
+    messages = store.list_messages(chat_id=chat_id)
     return [
         {
-            "id": m.id,
-            "role": m.role,
-            "content": m.content,
-            "created_at": m.created_at.isoformat() if m.created_at else None,
+            "id": m["id"],
+            "role": m["role"],
+            "content": m["content"],
+            "created_at": m.get("created_at"),
+            "sources": m.get("sources", []),
         }
         for m in messages
     ]
 
 
 @app.post("/api/chats/{chat_id}/messages")
-async def send_message(chat_id: int, request: Request, db: Session = Depends(get_db)):
-    user = get_current_user(request, db)
+async def send_message(chat_id: str, request: Request):
+    user = get_current_user(request)
     data = await request.json()
     user_message = (data.get("message") or "").strip()
+    prompt_template_id = (data.get("prompt_template_id") or "").strip() or None
 
     if not user_message:
         raise HTTPException(status_code=400, detail="Message cannot be empty")
@@ -149,35 +135,48 @@ async def send_message(chat_id: int, request: Request, db: Session = Depends(get
     if rag_service is None:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY is not configured")
 
-    chat = db.query(Chat).filter(Chat.id == chat_id, Chat.user_id == user.id).first()
-    if not chat:
+    chat = store.get_chat(chat_id)
+    if not chat or chat.get("user_id") != user["id"]:
         raise HTTPException(status_code=404, detail="Chat not found")
 
-    user_msg_row = Message(chat_id=chat_id, role="user", content=user_message)
-    db.add(user_msg_row)
-    db.commit()
+    store.add_message(chat_id=chat_id, user_id=user["id"], role="user", content=user_message)
+    prior_messages = store.list_messages(chat_id=chat_id)
+    history = [{"role": m["role"], "content": m["content"]} for m in prior_messages[:-1]]
 
-    prior_messages = (
-        db.query(Message)
-        .filter(Message.chat_id == chat_id)
-        .order_by(Message.created_at.asc(), Message.id.asc())
-        .all()
-    )
-
-    history = [{"role": m.role, "content": m.content} for m in prior_messages[:-1]]
+    prompt_template = store.get_prompt_template(prompt_template_id)
     query_embedding = rag_service.embed_text(user_message)
-    context_chunks = rag_service.find_relevant_chunks(db, query_embedding)
-    assistant_text = rag_service.generate_answer(user_message, context_chunks, history)
+    context_chunks = rag_service.find_relevant_chunks(query_embedding)
+    if not context_chunks:
+        assistant_text = "I can only answer from the provided PDF documents."
+    else:
+        assistant_text = rag_service.generate_answer(
+            user_message=user_message,
+            context_chunks=context_chunks,
+            history=history,
+            prompt_template=prompt_template["template"] if prompt_template else None,
+        )
 
-    assistant_msg_row = Message(chat_id=chat_id, role="assistant", content=assistant_text)
-    db.add(assistant_msg_row)
-
-    if chat.title == "New Chat":
-        chat.title = (user_message[:60] + "...") if len(user_message) > 60 else user_message
-
-    db.commit()
+    sources = sorted({item["source"] for item in context_chunks})
+    store.add_message(
+        chat_id=chat_id,
+        user_id=user["id"],
+        role="assistant",
+        content=assistant_text,
+        prompt_template_id=prompt_template_id,
+        sources=sources,
+    )
 
     return {
         "user_message": {"role": "user", "content": user_message},
-        "assistant_message": {"role": "assistant", "content": assistant_text},
+        "assistant_message": {
+            "role": "assistant",
+            "content": assistant_text,
+            "sources": sources,
+        },
     }
+
+
+@app.get("/api/prompt-templates")
+def list_prompt_templates(request: Request):
+    get_current_user(request)
+    return store.list_prompt_templates()
