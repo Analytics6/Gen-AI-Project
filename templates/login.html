@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | RAG Chatbot</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-card">
+    <h1>RAG Chatbot Login</h1>
+    <p>Sign in with your Azure SQL-backed account</p>
+
+    <form id="login-form" class="auth-form">
+      <label>
+        Username
+        <input type="text" name="username" required />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required />
+      </label>
+      <button type="submit">Sign in</button>
+      <p id="login-error" class="error"></p>
+    </form>
+  </main>
+
+  <script src="/static/login.js"></script>
+</body>
+</html>
